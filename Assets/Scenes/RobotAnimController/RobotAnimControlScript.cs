@@ -5,29 +5,23 @@ using UnityEngine;
 public class RobotAnimControlScript : MonoBehaviour
 {
     //Robotのアニメーターコントローラー
-    private Animator robotAnimator;
+    [SerializeField] private Animator robotAnimator;
     //マウスクリックのフラグ
     private bool mouseLeftButtonFlag;
-    [SerializeField] private GameObject laserSight ;
-    private LineRenderer lineRenderer;
-    private Vector3 lineEndPos;
+    private PlayerController playerController;
     // Start is called before the first frame update
     void Start()
     {
-        lineEndPos = transform.forward;
-
-        robotAnimator = GetComponent<Animator>();
-        mouseLeftButtonFlag = false;
-        lineRenderer = gameObject.AddComponent<LineRenderer>();
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.01f;
-        lineRenderer.SetPosition(0, laserSight.transform.position);
-        lineRenderer.SetPosition(1, lineEndPos*5);
+        playerController = GetComponent<PlayerController>();
+        mouseLeftButtonFlag = false;   
     }
 
     // Update is called once per frame
     void Update()
     {
+        robotAnimator.SetBool("runFlag", playerController.GetInputFlag());
+        
+
         //構えているかのフラグをセットする
         robotAnimator.SetBool("shotStanceFlag", GetShotStance());
 
@@ -60,6 +54,5 @@ public class RobotAnimControlScript : MonoBehaviour
         }
         return mouseLeftButtonFlag;
     }
-
 
 }
